@@ -74,6 +74,6 @@ class TestBaseModel(unittest.TestCase):
 
         new_bm = BaseModel(**bm_dict)
         new_bm_dict = new_bm.to_dict()
-        
+
         for key in bm_dict.keys():
             self.assertEqual(bm_dict[key], new_bm_dict[key])
