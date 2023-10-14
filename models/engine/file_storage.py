@@ -62,6 +62,5 @@ class FileStorage:
                 obj = json.load(f)
             for key, value in obj.items():
                 self.__objects[key] = MY_CLS[value["__class__"]](**value)
-                """ self.__objects[key] = BaseModel(**value) """
         except Exception:
             pass
