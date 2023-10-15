@@ -144,6 +144,48 @@ class HBNBCommand(cmd.Cmd):
             setattr(dict_obj[obj_key], my_args[2], my_args[3])
             models.storage.save()
 
+    def default(self, args):
+        """Default action is command is not available"""
+        if '.' not in args:
+            super().default(args)
+            return
+        class_name, *others = args.split(".")
+
+        if others[0] == "all()":
+            self.do_all(class_name)
+
+        elif others[0] == "count()":
+            objs = models.storage.all()
+            count = 0
+            for key in objs.keys():
+                if class_name in key:
+                    count += 1
+            print(count)
+
+        elif "show(" in others[0] and others[0][-1] == ')':
+            show_id = others[0][5:-1]
+            show_arg = class_name + ' ' + show_id
+            self.do_show(show_arg)
+
+        elif "destroy(" in others[0] and others[0][-1] == ')':
+            destroy_id = others[0][8:-1]
+            destroy_arg = class_name + ' ' + destroy_id
+            self.do_destroy(destroy_arg)
+
+        elif "update(" in others[0] and others[0][-1] == ')':
+            up_args = others[0][7:-1]
+            up_args = up_args.split(", ")
+            for i in range(len(up_args)):
+                up_args[i] = up_args[i].strip('"')
+            update_arg = class_name
+            for val in up_args:
+                update_arg += ' ' + val
+            self.do_update(update_arg)
+
+        else:
+            super().default(args)
+
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
