@@ -60,6 +60,16 @@ class TestBaseModel(unittest.TestCase):
         self.basemodel.save()
         self.assertTrue(self.basemodel.created_at != self.basemodel.updated_at)
 
+    def test_save(self):
+        """ Test save() """
+        self.basemodel.first_name = "My_name"
+        self.basemodel.save()
+
+        with open("file.json", 'r', encoding="utf-8") as f:
+            json_f = f.read()
+        self.assertTrue(len(json_f) != 0)
+        self.assertIn(f"BaseModel.{self.basemodel.id}", json_f)
+
     def test_to_dict(self):
         """ Test to_dict() """
         my_dict = self.basemodel.to_dict()
