@@ -37,7 +37,7 @@ class TestFileStorage(unittest.TestCase):
         """ Test __objects """
         self.assertIsInstance(FileStorage._FileStorage__objects, dict)
 
-    def test_new_save_all_reload(self):
+    def test_new_and_all(self):
         """ Test new, save, all, reload """
         models.storage.new(self.bm)
         models.storage.save()
@@ -46,6 +46,19 @@ class TestFileStorage(unittest.TestCase):
 
         self.assertEqual(len(all_objs), 1)
         self.assertIn(f"BaseModel.{self.bm.id}", all_objs)
+
+    def test_save_and_reload(self):
+        """ Test save """
+        my_bm = BaseModel()
+        models.storage.new(my_bm)
+        my_bm.first_name = "My_name"
+        my_bm.save()
+
+        models.storage.reload()
+        my_key = my_bm.__class__.__name__ + '.' + my_bm.id
+        self.assertIn(
+            "first_name", FileStorage._FileStorage__objects[my_key].to_dict()
+        )
 
     def test_wrong_input(self):
         """ Test wrong input """
