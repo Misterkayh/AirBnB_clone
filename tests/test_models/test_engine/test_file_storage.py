@@ -60,10 +60,11 @@ class TestFileStorage(unittest.TestCase):
     def test_reload(self):
         """ Test reload() """
         models.storage.reload()
-        self.assertIn(
-            self.bm.__class__.__name__ + '.' + self.bm.id,
-            models.storage.all()
-        )
+        model_objs = models.storage.all()
+        self.assertFalse(model_objs is None)
+
+        my_key = self.bm.__class__.__name__ + '.' + self.bm.id
+        self.assertIn(my_key, model_objs)
 
     def test_wrong_input(self):
         """ Test wrong input """
